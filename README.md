@@ -16,12 +16,15 @@ DUCS (2022-2024)
 ## Functionality
 
 1. Add users from `/register/` route.
-2. Login from `/login/' route.
+2. Login from `/login/` route.
 3. Logout from `/logout/` route.
-4. View list of surveys at `/survey/` route. Can create or attempt survey from here.
+4. View list of surveys at `/survey/` route. Can create or attempt survey from here. Also use all functionalities.
 5. Create a new survey at `/survey/create` route (only allowed by `superuser`).
 6. Attempt a survey (Please login properly first!) at `/survey/fill/?survey-id=<id>` route.
 7. Find similarity measures at `/survey/find-similarity/?survey-id=<id>` route.
+8. Find similarity against particular user by filtering at `/survey/find-similarity-to/?survey-id=<id>&user-id=<uid>` route.
+9. Pagination functionality at `/survey/find-similarity-paged/?survey-id=<id>&entries-per-page=<entries>&page-no=<page>` route.
+10. Search for similarities between all users matching pattern at `/survey/find-similarity-between/?survey-id=<id>&username-pattern=<pattern>` route.
 
 ## Current Users:
 

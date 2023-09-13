@@ -20,6 +20,10 @@
         <a href="{% url 'fill-survey' %}?survey-id={{ survey.survey_id }}">Attempt</a>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a href="{% url 'find-similarity' %}?survey-id={{ survey.survey_id }}">Similarities</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'find-similarity-between' %}?survey-id={{ survey.survey_id }}&username-pattern=">Pattern Matching</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'find-similarity-paged' %}?survey-id={{ survey.survey_id }}&entries-per-page=5&page-no=1">Pagination</a>
     </div>
     {% endfor %}
 </body>

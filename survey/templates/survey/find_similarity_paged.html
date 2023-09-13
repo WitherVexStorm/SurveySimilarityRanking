@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey | Similarity Between</title>
+</head>
+<body>
+    Enter page: <input type="search" name="search" id="search" list="pages" value="{{ similarity_page.number }}" onblur="changePage(this.value)">
+    <datalist id="pages">
+        {% for page_number in allowed_pages %}
+        <option value="{{ page_number}}">{{ page_number }}</option>
+        {% endfor %}
+    </datalist>
+    <table>
+        <thead>
+            <tr>
+                <th>S. No.</th>
+                <th>User 1</th>
+                <th>User 2</th>
+                <th>Similarity Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for instance in similarity_page.object_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ instance.user_1.username }}</td>
+                <td>{{ instance.user_2.username }}</td>
+                <td>{{ instance.value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button onclick="changePage({{ similarity_page.number }} - 1)" {% if not similarity_page.has_previous %} disabled {% endif %}>
+        Previous Page
+    </button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="changePage({{ similarity_page.number }} + 1)" {% if not similarity_page.has_next %} disabled {% endif %}>
+        Next Page
+    </button>
+    <script>
+        function changePage(page_number) {
+            location.href = "{% url 'find-similarity-paged' %}?survey-id={{ survey_id }}&entries-per-page={{ entries_per_page }}&page-no=" + page_number
+        }
+    </script>
+</body>
+</html>

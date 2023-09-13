@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Question, Answer, Survey, Similarity
 from django.contrib.auth.models import User
-import pandas as pd
+import re
 from sklearn.metrics.pairwise import cosine_similarity
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # surveys = [
 #     {
@@ -137,3 +138,49 @@ def find_similarity_to(request):
     }
     print(context)
     return render(request, 'survey/find_similarity_to.html', context=context)
+
+def find_similarity_between(request):
+    print(request.GET.get('survey-id'))
+    user_ids = Answer.objects.filter(question__in=Question.objects.filter(survey=Survey.objects.get(survey_id=request.GET.get('survey-id')))).values_list('user').distinct()
+    user_list = [ User.objects.get(id=id[0]) for id in user_ids ]
+    user_list = [ user for user in user_list if re.search(request.GET.get('username-pattern'), user.username, re.IGNORECASE) != None ]
+    simililarities = Similarity.objects.filter(survey=Survey.objects.get(survey_id=request.GET.get('survey-id')))
+    similarity_matrix = []
+    print(user_list)
+    for index1, user_1 in enumerate(user_list):
+        similarity_row = [ [user_list[index1]], [] ]
+        for index2, user_2 in enumerate(user_list):
+            if index1 >= index2:
+                print(user_1, ' - ', user_2)
+                similarity_row[1].append(round(simililarities.get(user_1=user_1, user_2=user_2).value * 100, 2))
+            else:
+                print(user_1, ' - ', user_2)
+                similarity_row[1].append(round(simililarities.get(user_1=user_2, user_2=user_1).value * 100, 2))
+        similarity_matrix.append(similarity_row)
+    context = { 
+        'similarity_matrix': similarity_matrix, 
+        'similarity_matrix_header': [None] + user_list, 
+        'survey_id': request.GET.get('survey-id'),
+        'username_pattern': request.GET.get('username-pattern')
+    }
+    print(context)
+    return render(request, 'survey/find_similarity_between.html', context=context)
+
+def find_similarity_paged(request):
+    print(request.GET.get('survey-id'))
+    simililarities = Similarity.objects.filter(survey=Survey.objects.get(survey_id=request.GET.get('survey-id')))
+    page_manager = Paginator(simililarities, int(request.GET.get('entries-per-page', 5)))
+    try:
+        page = page_manager.get_page(request.GET.get('page-no'))
+    except PageNotAnInteger:
+        page = page_manager.page(1)
+    except EmptyPage:
+        page = page_manager.page(page_manager.num_pages)
+    context = { 
+        'similarity_page': page,
+        'allowed_pages': range(1, page_manager.num_pages+1),
+        'entries_per_page': int(request.GET.get('entries-per-page', 5)),
+        'survey_id': request.GET.get('survey-id')
+    }
+    print(context)
+    return render(request, 'survey/find_similarity_paged.html', context=context)

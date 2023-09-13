@@ -12,7 +12,7 @@
         <option value="{{ user.id }}">{{ user.username }}</option>
         {% endfor %}
     </datalist>
-    <button onclick="goToPage(document.getElementById('search').value)">Go!</button>
+    <button onclick="compareAgainst(document.getElementById('search').value)">Go!</button>
     <table>
         <thead>
             <tr>
@@ -36,7 +36,7 @@
         {% endfor %}
     </ul>
     <script>
-        function goToPage(user) {
+        function compareAgainst(user) {
             location.href = "{% url 'find-similarity-to' %}?survey-id={{ survey_id }}&user-id=" + user
         }
     </script>

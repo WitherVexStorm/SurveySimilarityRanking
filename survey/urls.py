@@ -24,4 +24,6 @@ urlpatterns = [
     path('fill/', views.fill_survey, name='fill-survey'),
     path('find-similarity/', views.find_similarity, name='find-similarity'),
     path('find-similarity-to/', views.find_similarity_to, name='find-similarity-to'),
+    path('find-similarity-between/', views.find_similarity_between, name='find-similarity-between'),
+    path('find-similarity-paged/', views.find_similarity_paged, name='find-similarity-paged'),
 ]
