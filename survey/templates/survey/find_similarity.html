@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey | Similarity</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                {% for header in similarity_matrix_header %}
+                <th>{{ header.username }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for user, row in similarity_matrix %}
+            <tr>
+                <td>{{ user.0.username }}</td>
+                {% for similarity in row %}
+                <td>{{ similarity }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <ul>
+        {% for user in similarity_matrix_header %}
+        {% if not forloop.first %}
+        <li>
+            Compare against <a href="{% url 'find-similarity-to' %}?survey-id={{ survey_id }}&user-id={{ user.id }}">{{ user.username }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>

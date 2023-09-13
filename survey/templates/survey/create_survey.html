@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveys | Create</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+        <div>{{ message.tags }} : {{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Create Survey</legend>
+            <div style="margin-bottom: 10px;">
+                <label for="survey-name">Survey Name: </label>
+                <input type="text" style="width: 100%;" name="survey-name" id="survey-name" value="Userfacet Survey">
+            </div>
+            <script>
+                const questions = [
+                    'How much do you like Userfacet?',
+                    'How much do you like frontend?',
+                    'How much do you like backend?',
+                    'How much do you like fullstack?'
+                ]
+                const question_template = (id, value) => `
+                <div style="margin-bottom: 10px;">
+                    <label for="question-${ id }">Question: ${ id }</label>
+                    <input type="text" style="width: 100%" name="question-${ id }" id="question-${ id }" value="${ value }">
+                </div>`
+                for(let i = 0; i < 20; ++i) {
+                    document.querySelector('fieldset').innerHTML += question_template(i+1, questions[i % questions.length])
+                }
+            </script>
+            <button type="submit" style="width: 100%;">Create Survey</button>
+        </fieldset>
+    </form>
+</body>
+</html>

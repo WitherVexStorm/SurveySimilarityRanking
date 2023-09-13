@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveys | Home</title>
+</head>
+<body>
+    <style>
+        .option-row {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    {% if messages %}
+    {% for message in messages %}
+        <div>{{ message.tags }} : {{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Fill Survey</legend>
+            <h2>{{ survey.name }}</h2>
+            <input type="hidden" name="survey-name" value="{{ survey.name }}">
+            {% for question, multiple_choices in survey.questions %}
+            <div style="margin-bottom: 10px;">
+                <div>{{ question.text }}</div>
+                <div class="option-row">
+                    {% for option in multiple_choices %}
+                    <span>
+                        <input type="radio" id="q{{ question.number }}o{{ option.value }}" name="{{ question.question_id }}" value="{{ option.name }}" {% if forloop.first %} checked {% endif %}>
+                        <label for="q{{ question.number }}o{{ option.value }}">{{ option.label }}</label>
+                    </span>
+                    {% endfor %}
+                </div>
+                <!-- <input type="radio" style="width: 100%;" name="question-{{ forloop.counter }}-option-1" id="question-{{ forloop.counter }}" value="Userfacet Survey"> -->
+            </div>
+            {% endfor %}
+            <button type="submit" style="width: 100%;">Submit Survey</button>
+        </fieldset>
+    </form>
+</body>
+</html>

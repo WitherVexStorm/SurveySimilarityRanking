@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveys | Home</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+        <div>{{ message.tags }} : {{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% for survey in surveys %}
+    <div>
+        <a href="{%  url 'create-survey' %}">Create a survey!</a>
+    </div>
+    <div>
+        <h2>{{ survey.survey_name }}</h2>
+        <a href="{% url 'fill-survey' %}?survey-id={{ survey.survey_id }}">Attempt</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'find-similarity' %}?survey-id={{ survey.survey_id }}">Similarities</a>
+    </div>
+    {% endfor %}
+</body>
+</html>
